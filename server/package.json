@@ -4,9 +4,10 @@
   "description": "ShipSafe - AI-powered repository security analyzer",
   "main": "src/server.js",
   "scripts": {
-    "start": "tsx src/server.js",
-    "dev": "nodemon --exec tsx src/server.js"
-  },
+  "start": "tsx src/server.js",
+  "dev": "nodemon --exec tsx src/server.js",
+  "build": "prisma generate"
+},
   "keywords": [
     "ai",
     "security",
