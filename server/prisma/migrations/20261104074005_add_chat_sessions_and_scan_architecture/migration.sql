@@ -1,0 +1,39 @@
+-- AlterTable
+ALTER TABLE "ChatMessage" ADD COLUMN     "sessionId" TEXT;
+
+-- AlterTable
+ALTER TABLE "Scan" ADD COLUMN     "architecture" JSONB,
+ADD COLUMN     "architectureGraph" JSONB,
+ADD COLUMN     "chatSessionId" TEXT;
+
+-- CreateTable
+CREATE TABLE "ChatSession" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "title" TEXT NOT NULL DEFAULT 'New Analysis',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ChatSession_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "ChatSession_userId_idx" ON "ChatSession"("userId");
+
+-- CreateIndex
+CREATE INDEX "ChatSession_updatedAt_idx" ON "ChatSession"("updatedAt");
+
+-- CreateIndex
+CREATE INDEX "ChatMessage_sessionId_idx" ON "ChatMessage"("sessionId");
+
+-- CreateIndex
+CREATE INDEX "Scan_chatSessionId_idx" ON "Scan"("chatSessionId");
+
+-- AddForeignKey
+ALTER TABLE "ChatSession" ADD CONSTRAINT "ChatSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Scan" ADD CONSTRAINT "Scan_chatSessionId_fkey" FOREIGN KEY ("chatSessionId") REFERENCES "ChatSession"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "ChatSession"("id") ON DELETE CASCADE ON UPDATE CASCADE;
